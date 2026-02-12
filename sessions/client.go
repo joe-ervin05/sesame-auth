@@ -144,10 +144,6 @@ func (c *Client) SessionMiddleware() func(http.Handler) http.Handler {
 }
 
 func (c *Client) RequireSession(next http.Handler) http.Handler {
-	return c.RequirePrimarySession(next)
-}
-
-func (c *Client) RequirePrimarySession(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if GetSession(r.Context()) == nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)

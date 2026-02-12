@@ -47,7 +47,7 @@ ON token_buckets(updated_at_ms);
 func TestSQLiteTokenBucketConsumeAndRefill(t *testing.T) {
 	db := setupTestDB(t)
 
-	limiter, err := NewTokenBucketRateLimit(context.Background(), db, "test", 2, 2*time.Second)
+	limiter, err := NewTokenBucket(context.Background(), db, "test", 2, 2*time.Second)
 	if err != nil {
 		t.Fatalf("new limiter: %v", err)
 	}
@@ -83,7 +83,7 @@ func TestSQLiteTokenBucketConsumeAndRefill(t *testing.T) {
 func TestSQLiteTokenBucketPruneIdle(t *testing.T) {
 	db := setupTestDB(t)
 
-	limiter, err := NewTokenBucketRateLimit(context.Background(), db, "test-prune", 2, time.Second)
+	limiter, err := NewTokenBucket(context.Background(), db, "test-prune", 2, time.Second)
 	if err != nil {
 		t.Fatalf("new limiter: %v", err)
 	}

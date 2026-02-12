@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type SQLiteTokenBucketRateLimit struct {
+type TokenBucket struct {
 	db               *sql.DB
 	storageKey       string
 	max              int64
@@ -16,7 +16,7 @@ type SQLiteTokenBucketRateLimit struct {
 	now              func() time.Time
 }
 
-func NewTokenBucketRateLimit(ctx context.Context, db *sql.DB, storageKey string, max int64, refillInterval time.Duration) (*SQLiteTokenBucketRateLimit, error) {
+func NewTokenBucket(ctx context.Context, db *sql.DB, storageKey string, max int64, refillInterval time.Duration) (*TokenBucket, error) {
 	if db == nil {
 		return nil, errors.New("ratelimit db is required")
 	}
@@ -32,7 +32,7 @@ func NewTokenBucketRateLimit(ctx context.Context, db *sql.DB, storageKey string,
 		intervalMs = 1000
 	}
 
-	return &SQLiteTokenBucketRateLimit{
+	return &TokenBucket{
 		db:               db,
 		storageKey:       storageKey,
 		max:              max,
@@ -41,7 +41,7 @@ func NewTokenBucketRateLimit(ctx context.Context, db *sql.DB, storageKey string,
 	}, nil
 }
 
-func (l *SQLiteTokenBucketRateLimit) Consume(ctx context.Context, key string, cost int64) (bool, error) {
+func (l *TokenBucket) Consume(ctx context.Context, key string, cost int64) (bool, error) {
 	if l == nil {
 		return false, errors.New("ratelimit limiter is nil")
 	}
@@ -147,7 +147,7 @@ func (l *SQLiteTokenBucketRateLimit) Consume(ctx context.Context, key string, co
 	return allowed, nil
 }
 
-func (l *SQLiteTokenBucketRateLimit) PruneIdle(ctx context.Context, maxIdle time.Duration) error {
+func (l *TokenBucket) PruneIdle(ctx context.Context, maxIdle time.Duration) error {
 	if l == nil {
 		return errors.New("ratelimit limiter is nil")
 	}
@@ -165,7 +165,7 @@ func (l *SQLiteTokenBucketRateLimit) PruneIdle(ctx context.Context, maxIdle time
 	return err
 }
 
-func (l *SQLiteTokenBucketRateLimit) StartCleanup(interval, maxIdle time.Duration) func() {
+func (l *TokenBucket) StartCleanup(interval, maxIdle time.Duration) func() {
 	if interval <= 0 {
 		interval = 5 * time.Minute
 	}
@@ -193,6 +193,6 @@ func (l *SQLiteTokenBucketRateLimit) StartCleanup(interval, maxIdle time.Duratio
 	}
 }
 
-func (l *SQLiteTokenBucketRateLimit) String() string {
+func (l *TokenBucket) String() string {
 	return fmt.Sprintf("sqlite-token-bucket[%s,max=%d,refill_ms=%d]", l.storageKey, l.max, l.refillIntervalMs)
 }
