@@ -1,4 +1,4 @@
-# sesame-auth
+# Sesame Auth
 
 Clean, production-ready auth packages for Go + SQLite.
 
