@@ -1,6 +1,6 @@
 # sesame-auth
 
-Clean, production-ready auth patterns for Go + SQLite.
+Clean, production-ready auth packages for Go + SQLite.
 
 ## SQLite-Only
 
