@@ -1,3 +1,5 @@
+-- Sessions package schema
+
 CREATE TABLE sessions (
     id TEXT NOT NULL PRIMARY KEY,
     secret_hash BLOB NOT NULL,
@@ -21,6 +23,8 @@ CREATE TABLE users (
     password_hash TEXT
 );
 
+--Email & password package schema
+
 CREATE TABLE email_verification_codes (
     id TEXT NOT NULL PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES users(id),
@@ -42,6 +46,8 @@ CREATE TABLE password_reset_tokens (
 
 CREATE INDEX password_reset_tokens_user_id_idx ON password_reset_tokens(user_id);
 
+-- OAuth package schema
+
 CREATE TABLE oauth_accounts (
     id TEXT NOT NULL PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES users(id),
@@ -53,6 +59,8 @@ CREATE TABLE oauth_accounts (
 
 CREATE INDEX oauth_accounts_user_id_idx ON oauth_accounts(user_id);
 
+-- Rate limiting package schema
+
 CREATE TABLE token_buckets (
     storage_key TEXT NOT NULL,
     bucket_key TEXT NOT NULL,
@@ -63,6 +71,8 @@ CREATE TABLE token_buckets (
 );
 
 CREATE INDEX token_buckets_updated_at_ms_idx ON token_buckets(updated_at_ms);
+
+-- MFA package schema
 
 CREATE TABLE user_totp_credentials (
     id TEXT NOT NULL PRIMARY KEY,
@@ -92,6 +102,8 @@ CREATE TABLE user_totp_pending_setups (
 
 CREATE INDEX user_totp_pending_setups_user_id_idx ON user_totp_pending_setups(user_id);
 
+-- Passkeys package schema
+
 CREATE TABLE user_passkeys (
     id TEXT NOT NULL PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES users(id),
@@ -112,6 +124,8 @@ CREATE TABLE webauthn_flows (
 );
 
 CREATE INDEX webauthn_flows_expires_at_idx ON webauthn_flows(expires_at);
+
+-- Email only package schema
 
 CREATE TABLE email_magic_links (
     id TEXT NOT NULL PRIMARY KEY,
