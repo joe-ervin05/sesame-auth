@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/joe-ervin05/sesame-auth/mailer"
+	"github.com/atomicbase/sesame/mailer"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 

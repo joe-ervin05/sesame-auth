@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/joe-ervin05/sesame-auth/mailer"
+	"github.com/atomicbase/sesame/mailer"
 )
 
 type ResetPasswordTemplateData struct {

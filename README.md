@@ -16,6 +16,12 @@ This library currently supports SQLite only.
 
 Manages session lifecycle, cookie operations, middleware, and auth-level guards.
 
+We use a split-token for sessions with an id and secret. The secret is hashed for storage.
+
+```
+<session_id>.<session_secret>
+```
+
 Use it for:
 
 - creating/deleting sessions
@@ -55,6 +61,8 @@ sessionClient, err := sessions.NewClient(sessions.ClientConfig{
 ### `emailpassword`
 
 Implements email/password signup, login, password reset, change-password, and email verification.
+
+Passwords are hashed using Argon2id and login uses a dummy hash to prevent side-channel attacks.
 
 Use it for:
 
@@ -120,7 +128,16 @@ emailOnlyClient, err := emailonly.NewClient(emailonly.ClientConfig{
 
 ### `oauth`
 
-Handles OAuth provider configuration and callback flow orchestration.
+Handles OAuth provider configuration and callback flows.
+
+We support all OIDC providers out of the box (Google, Microsoft, Facebook, etc) and currently provide custom adapters for:
+
+- GitHub
+- Discord
+- Reddit
+- Shopify
+- Spotify
+- Twitter
 
 Use it for:
 
@@ -234,7 +251,6 @@ func (t *TokenBucket) PruneIdle(ctx context.Context, maxIdle time.Duration) erro
 func (t *TokenBucket) StartCleanup(interval, maxIdle time.Duration) func()
 func WithRateLimit(limiter Limiter, cost int64, keyFn func(*http.Request) string, next http.Handler) http.Handler
 func ClientIP(r *http.Request) string
-func UserIDFromSession(r *http.Request) string
 ```
 
 Quick start:

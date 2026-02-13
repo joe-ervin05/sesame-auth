@@ -1,4 +1,4 @@
-module github.com/joe-ervin05/sesame-auth
+module github.com/atomicbase/sesame
 
 go 1.25.5
 
